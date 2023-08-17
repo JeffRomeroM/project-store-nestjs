@@ -15,4 +15,27 @@ export class ProductsService{
         await  this.productRepo.save(product);
         return product;
     }
+    //Encontrar un registro
+    findOne(id: number){
+        return this.productRepo.findOneBy({id})
+    }
+    //mostrar todos los registros
+    findAll(){
+        return   this.productRepo.find({
+            order: {id: 'ASC'},
+        });
+    }
+    //eliminar un registro
+    async remove(id:number){
+        const product =await this.findOne(id);
+        await this.productRepo.remove(product);
+        return 'Producto eliminado';
+    }
+
+    //actualizar un registro
+    async update(id: number, cambios: CreateProductDto){
+        const oldProduct = await this.findOne(id);
+        const updateProduct = await this.productRepo.merge(oldProduct, cambios);
+        return this.productRepo.save(updateProduct);
+    }
 }
