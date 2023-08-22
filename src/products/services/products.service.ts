@@ -15,10 +15,20 @@ export class ProductsService{
         await  this.productRepo.save(product);
         return product;
     }
-    //Encontrar un registro
+    // //Encontrar un registro
+    // findOne(id: number){
+    //     return this.productRepo.findOneBy({id})
+    // }
+    //Encontrar un registro con relaciones
     findOne(id: number){
-        return this.productRepo.findOneBy({id})
+        return this.productRepo.findOne({
+            where: {id},
+            relations: {
+                autor: true,
+            }
+        });
     }
+
     //mostrar todos los registros
     findAll(){
         return   this.productRepo.find({
