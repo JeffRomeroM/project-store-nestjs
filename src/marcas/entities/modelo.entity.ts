@@ -19,15 +19,15 @@ export class Modelo {
   // //relaciones
   @ManyToOne(()=> Marca)
   @JoinColumn({
-   name: 'marca_id', //el campo que relaciona a mi tabla
-   referencedColumnName: 'id' //este es el id del usuario
+   name: 'marca_id', //el campo que relaciona a la tabla marca
+   referencedColumnName: 'id' //este es el id de la marca
 
   })
   marca: Marca;
 
   @ManyToOne(()=> User)
   @JoinColumn({
-    name: 'user_id', //el campo que relaciona a mi tabla
+    name: 'user_id', //el campo que relaciona a la tabla usuario
     referencedColumnName: 'id' //este es el id del usuario
 
   })

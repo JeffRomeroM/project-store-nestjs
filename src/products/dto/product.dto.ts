@@ -22,4 +22,9 @@ export class CreateProductDto {
   @IsNumber()
   @IsNotEmpty()
   stock: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  user_id: number;
+
 }

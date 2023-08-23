@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateMarcaDto } from '../dto/marca.dto';
-import { Marca } from '../entities/marca.entity';
 import { Modelo } from '../entities/modelo.entity';
 import { CreateModeloDto } from '../dto/modelo.dto';
 
@@ -19,11 +17,7 @@ export class ModelosService{
         return modelo;
     }
 
-    //Encontrar un modelo
-    // findOne(id: number){
-    //     return this.modeloRepo.findOneBy({id})
-    // }
-
+    //mostrar un modelo mediante el id y mostrar los datos de marca y usuario
     findOne(id: number){
          return this.modeloRepo.findOne({
              where: {id},
@@ -41,11 +35,11 @@ export class ModelosService{
         });
     }
 
-    //eliminar una marca
+    //eliminar un modelo
     async remove(id:number){
         const modelo =await this.findOne(id);
         await this.modeloRepo.remove(modelo);
-        return 'modelo eliminado';
+        return 'Modelo eliminado';
     }
 
     //actualizar un modelo

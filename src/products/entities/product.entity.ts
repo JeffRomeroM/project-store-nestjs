@@ -25,7 +25,7 @@ export class Product {
   //relaciones
   @ManyToOne(()=> User)
   @JoinColumn({
-    name: 'user_id', //el campo que relaciona a mi tabla
+    name: 'user_id', //el campo que relaciona la tabla
     referencedColumnName: 'id' //este es el id del usuario
 
   })

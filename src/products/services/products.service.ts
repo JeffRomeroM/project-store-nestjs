@@ -15,10 +15,7 @@ export class ProductsService{
         await  this.productRepo.save(product);
         return product;
     }
-    // //Encontrar un registro
-    // findOne(id: number){
-    //     return this.productRepo.findOneBy({id})
-    // }
+    
     //Encontrar un registro con relaciones
     findOne(id: number){
         return this.productRepo.findOne({
