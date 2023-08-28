@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Category } from './category.entity';
+import { Proveedor } from './proveedor.entity';
 
 @Entity()
 export class Product {
@@ -28,8 +29,11 @@ export class Product {
   @CreateDateColumn({ type: 'timestamp', default: ()=>'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'int4', nullable: false })
   categoria_id: number;
+
+  @Column({ type: 'int4', nullable: true })
+  proveedor_id: number;
 
   //relaciones
   @ManyToOne(()=> User)
@@ -42,8 +46,17 @@ export class Product {
 
   @ManyToOne(() => Category)
   @JoinColumn({ 
-    name: 'categoria_id' })
+    name: 'categoria_id',
+    referencedColumnName: 'id'
+   })
   categoria: Category;
+
+  @ManyToOne(() => Proveedor)
+  @JoinColumn({ 
+    name: 'proveedor_id',
+    referencedColumnName: 'id'
+   })
+  proveedor: Proveedor;
 
 
 }
