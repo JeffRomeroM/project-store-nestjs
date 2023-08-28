@@ -18,19 +18,16 @@ export class ProveedoresService {
     return proveedor;
   }
   
-  //Encontrar una categoria con relaciones a user
-  // finOne(id: number) {
-  //   return this.proveedorRepo.findOne({
-  //     where:{ id },
-  //     relations: {
-  //       autor: true,
-  //     },
+  //Encontrar un proveedor con relaciones a user
+   findOne(id: number) {
+     return this.proveedorRepo.findOne({
+       where:{ id },
+       relations: {
+         autor: true,
+       },
 
-  //   });
-  // }
-  findOne(id: number){
-    return this.proveedorRepo.findOneBy({id})
-}
+     });
+   }
 
   //mostrar todos los proveedores
   findAll(){
