@@ -6,7 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { MarcasModule } from './marcas/marcas.module';
 import { FilesModule } from './files/files.module';
-import { FilesPdfModule } from './filesPDF/filesPdf.module';
+import { FilesPdfModule } from './filesPDF/pdfFiles.module';
 
 @Module({
   imports: [
