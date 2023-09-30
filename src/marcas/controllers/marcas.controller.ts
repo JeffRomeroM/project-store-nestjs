@@ -7,6 +7,7 @@ import { CreateMarcaDto } from "../dto/marca.dto";
 export class MarcaController
 {
     constructor(private readonly marcasService:MarcasService){}
+    
     @Post()
     async CreateMarca(@Body() createMarcaDto: CreateMarcaDto){
         return this.marcasService.create(createMarcaDto);

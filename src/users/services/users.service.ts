@@ -1,29 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/user.dto';
+import { UserImage } from '../entities/user-image.entity';
 
 @Injectable()
 export class UsersService{
     constructor(
         @InjectRepository(User)
-        private userRepo: Repository<User>
+        private userRepo: Repository<User>,
+
+        @InjectRepository(UserImage)
+        private readonly userImageRepo: Repository<UserImage>,
+
+        private readonly dataSource: DataSource,
     ){}
 
-    async create(createUserDto:CreateUserDto){
-        const user = this.userRepo.create(createUserDto);
+    async create(userDto:CreateUserDto){
+        const { images = [], ...detailsUser} = userDto;
+
+        const user = await this.userRepo.create({
+            ...detailsUser,
+            images: images.map((image) => this.userImageRepo.create({ url: image }),
+            ),
+        });
         await  this.userRepo.save(user);
         return user;
     }
     //Encontrar un user
     findOne(id: number){
-        return this.userRepo.findOneBy({id})
+        return this.userRepo.findOne({
+            where: {id},
+            relations: {
+                images: true,
+            },
+        });
     }
     //mostrar todos los usuarios
     findAll(){
         return   this.userRepo.find({
             order: {id: 'ASC'},
+            relations: {
+                images: true,
+            },
         });
     }
     //eliminar un usuario
@@ -33,10 +53,40 @@ export class UsersService{
         return 'Usuario eliminado';
     }
 
-    //actualizar un usuario
+    //actualizar un usuario con imagenes
     async update(id: number, cambios: CreateUserDto){
-        const oldUser = await this.findOne(id);
-        const updateUser = await this.userRepo.merge(oldUser, cambios);
-        return this.userRepo.save(updateUser);
+        const {images, ...updateAll } = cambios;
+        const user = await this.userRepo.preload({
+            id: id,
+            //Spread Operator(operador para esparcir)
+            ...updateAll,//Esparcir todos los datos del usuario
+            
+
+        
+        });
+        //correr el queryRunner
+
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        if(images) {
+            //sino esta vacio borramos las imagenes existentes
+            await queryRunner.manager.delete(UserImage, {user: { id }});
+            
+            //creamos nuevas imagenes
+            user.images = images.map((image) =>
+            this.userImageRepo.create({ url: image }),
+            );
+        } else {
+            user.images = await this.userImageRepo.findBy({ user: { id }});
+        }
+        //guardamos el usuario
+        await queryRunner.manager.save(user);
+
+        //finalizamos la transaccion y liberamos el queryRunner
+        await queryRunner.commitTransaction();
+        await queryRunner.release();
+        return user;
     }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateMarcaDto } from '../dto/marca.dto';
 import { Marca } from '../entities/marca.entity';
+import { CreateMarcaDto } from '../dto/marca.dto';
 
 @Injectable()
 export class MarcasService{
